@@ -103,8 +103,8 @@ function Install-Codex {
 }
 
 function Install-OpenCode {
-  # OpenCode Windows global config primary path: %USERPROFILE%\.opencode.json
-  $configPath = Join-Path $HOME ".opencode.json"
+  # OpenCode config path requested for this bundle: $HOME\.config\opencode\opencode.json
+  $configPath = Join-Path $HOME ".config\opencode\opencode.json"
   $config = Read-JsonObjectOrEmpty -Path $configPath
   Backup-FileIfExists -Path $configPath
 
@@ -220,4 +220,5 @@ Write-Host "2. For NotebookLM, run the MCP setup_auth tool once and sign in in t
 Write-Host "3. For Firebase MCP, run firebase login once per computer if not already logged in."
 Write-Host "4. For Obsidian MCP, keep Obsidian Local REST/MCP server running and set OBSIDIAN_API_KEY as a local environment variable if your agent requires it."
 Write-Host "5. For GitHub remote MCP, keep GITHUB_PAT_TOKEN only in a local environment variable or credential store; never write the real token into repo files."
+
 

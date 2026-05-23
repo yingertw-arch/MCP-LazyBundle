@@ -49,7 +49,7 @@ powershell -ExecutionPolicy Bypass -File .\install-agent-lazybundle.ps1
 預設會嘗試安裝到：
 
 - Codex：`$HOME\.codex\config.toml`
-- OpenCode：`$HOME\.opencode.json`
+- OpenCode：`$HOME\.config\opencode\opencode.json`
 - Claude Desktop：`%APPDATA%\Claude\claude_desktop_config.json`
 - 目前資料夾的專案級 `mcp.json`
 
@@ -202,3 +202,4 @@ window.FIREBASE_CONFIG = {
 - 這個設定不保存 Google 密碼、API key 或 token。
 - 不要把 `%APPDATA%\notebooklm-mcp`、`.env`、token、cookie、service account key 或任何憑證上傳到 GitHub。
 - NotebookLM MCP 會透過瀏覽器自動化操作你的 NotebookLM，請只用在你信任的本機環境。
+
