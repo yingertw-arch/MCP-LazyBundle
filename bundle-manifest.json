@@ -1,0 +1,68 @@
+﻿{
+  "name": "codex-mcp-lazybundle",
+  "version": "2026-05-23",
+  "description": "One-click MCP setup bundle for GitHub, Firebase, Obsidian, and NotebookLM across Codex, OpenCode, Claude Desktop, and generic mcp.json agents.",
+  "installers": {
+    "crossAgent": "install-agent-lazybundle.ps1",
+    "codexOnly": "install-mcp-lazybundle.ps1",
+    "authCheck": "setup-agent-auth.ps1"
+  },
+  "agentTargets": ["Codex", "OpenCode", "ClaudeDesktop", "ProjectMcpJson"],
+  "configFragments": {
+    "codexAll": "mcp-servers/all.codex.toml",
+    "genericAll": "mcp-servers/all.mcp.json",
+    "opencodeAll": "agent-configs/opencode.fragment.json",
+    "genericMcpServersAll": "agent-configs/mcpServers.fragment.json"
+  },
+  "sharedAuth": {
+    "github": {
+      "method": "remote MCP reads GITHUB_PAT_TOKEN from local environment where supported; prefer gh auth login for normal git operations.",
+      "tokenPolicy": "Never write the real GitHub token into repo files. Keep it in local environment variables or OS credential storage only."
+    },
+    "firebase": {
+      "method": "firebase login; MCP command is npx.cmd -y firebase-tools@latest mcp",
+      "tokenPolicy": "Do not use firebase login:ci or FIREBASE_TOKEN for normal local agent workflows."
+    },
+    "obsidian": {
+      "method": "local Obsidian MCP/REST endpoint at http://127.0.0.1:27123/mcp/ reads OBSIDIAN_API_KEY from local environment where supported.",
+      "tokenPolicy": "Never write the real Obsidian API key into repo files."
+    },
+    "notebooklm": {
+      "method": "run setup_auth once; browser login state is stored locally under %APPDATA%\\notebooklm-mcp.",
+      "tokenPolicy": "No manual token is stored in the bundle."
+    },
+    "helperScript": "setup-agent-auth.ps1"
+  },
+  "servers": [
+    {
+      "id": "github",
+      "displayName": "GitHub MCP",
+      "transport": "remote-http",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "authEnvVar": "GITHUB_PAT_TOKEN"
+    },
+    {
+      "id": "firebase",
+      "displayName": "Firebase MCP",
+      "transport": "stdio",
+      "command": "npx.cmd",
+      "args": ["-y", "firebase-tools@latest", "mcp"],
+      "auth": "Uses firebase CLI login state. Run firebase login once per computer."
+    },
+    {
+      "id": "obsidian",
+      "displayName": "Obsidian MCP",
+      "transport": "remote-http-localhost",
+      "url": "http://127.0.0.1:27123/mcp/",
+      "authEnvVar": "OBSIDIAN_API_KEY"
+    },
+    {
+      "id": "notebooklm",
+      "displayName": "Google NotebookLM MCP",
+      "transport": "stdio",
+      "command": "npx.cmd",
+      "args": ["-y", "notebooklm-mcp@latest"],
+      "auth": "Run setup_auth once after the agent reloads; sign in in the Chrome window. Cookies are stored locally under %APPDATA%\\notebooklm-mcp."
+    }
+  ]
+}

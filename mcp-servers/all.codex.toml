@@ -1,0 +1,17 @@
+﻿[mcp_servers.github]
+url = "https://api.githubcopilot.com/mcp/"
+bearer_token_env_var = "GITHUB_PAT_TOKEN"
+
+[mcp_servers.firebase]
+command = "npx.cmd"
+args = ["-y", "firebase-tools@latest", "mcp"]
+
+[mcp_servers.obsidian]
+url = "http://127.0.0.1:27123/mcp/"
+bearer_token_env_var = "OBSIDIAN_API_KEY"
+
+[mcp_servers.notebooklm]
+command = "npx.cmd"
+args = ["-y", "notebooklm-mcp@latest"]
+# Optional environment variables. Keep secrets out of this file.
+# env = { NOTEBOOKLM_PROFILE = "standard", NOTEBOOKLM_AI_MARKER = "true" }

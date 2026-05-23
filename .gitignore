@@ -1,0 +1,20 @@
+﻿# Local/private files
+.env
+.env.*
+*.local
+*.secret
+*.key
+*.pem
+
+# Backup files created by installers
+*.bak-lazybundle-*
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Runtime auth/profile folders must stay local
+notebooklm-mcp/
+chrome_profile/

@@ -1,0 +1,5 @@
+﻿[mcp_servers.notebooklm]
+command = "npx.cmd"
+args = ["-y", "notebooklm-mcp@latest"]
+# Optional environment variables. Keep secrets out of this file.
+# env = { NOTEBOOKLM_PROFILE = "standard", NOTEBOOKLM_AI_MARKER = "true" }

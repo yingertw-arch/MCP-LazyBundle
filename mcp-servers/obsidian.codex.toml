@@ -1,0 +1,3 @@
+﻿[mcp_servers.obsidian]
+url = "http://127.0.0.1:27123/mcp/"
+bearer_token_env_var = "OBSIDIAN_API_KEY"
