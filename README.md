@@ -53,6 +53,14 @@ powershell -ExecutionPolicy Bypass -File .\install-agent-lazybundle.ps1
 - Claude Desktop：`%APPDATA%\Claude\claude_desktop_config.json`
 - 目前資料夾的專案級 `mcp.json`
 
+如果只想安裝到 Claude Code CLI（~/.claude/settings.json）：
+
+```powershell
+powershell -ExecutionPolicy Bypass -Command "cd 'C:\Users\HSPS\Desktop\Codex\MCP-LazyBundle'; . .\install-agent-lazybundle.ps1 -Targets @(); Install-ClaudeCode"
+```
+
+> **注意**：Claude Code CLI 設定檔是本機專屬、不被 git 追蹤，安裝時會讀取 `GITHUB_PAT_TOKEN` 與 `OBSIDIAN_API_KEY` 實際值寫入。
+
 如果只想安裝到 OpenCode：
 
 ```powershell
@@ -202,4 +210,5 @@ window.FIREBASE_CONFIG = {
 - 這個設定不保存 Google 密碼、API key 或 token。
 - 不要把 `%APPDATA%\notebooklm-mcp`、`.env`、token、cookie、service account key 或任何憑證上傳到 GitHub。
 - NotebookLM MCP 會透過瀏覽器自動化操作你的 NotebookLM，請只用在你信任的本機環境。
+
 

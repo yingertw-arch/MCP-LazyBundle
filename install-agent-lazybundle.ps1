@@ -138,6 +138,34 @@ function Install-OpenCode {
   Write-Host "OpenCode: added GitHub, Firebase, Obsidian, NotebookLM MCP to $configPath"
 }
 
+
+function Install-ClaudeCode {
+  $configPath = Join-Path $HOME ".claude\settings.json"
+  $config = Read-JsonObjectOrEmpty -Path $configPath
+  Backup-FileIfExists -Path $configPath
+
+  if (!$config.Contains('mcpServers') -or $null -eq $config['mcpServers']) { $config['mcpServers'] = [ordered]@{} }
+
+  $githubEnv = [ordered]@{}
+  $githubPat = [System.Environment]::GetEnvironmentVariable('GITHUB_PAT_TOKEN', 'User')
+  if (-not $githubPat) { $githubPat = $env:GITHUB_PAT_TOKEN }
+  if ($githubPat) { $githubEnv['GITHUB_PERSONAL_ACCESS_TOKEN'] = $githubPat }
+  else { Write-Warning "GITHUB_PAT_TOKEN not found. Set GITHUB_PERSONAL_ACCESS_TOKEN manually in $configPath"; $githubEnv['GITHUB_PERSONAL_ACCESS_TOKEN'] = '' }
+
+  $config['mcpServers']['github'] = [ordered]@{ command = 'npx.cmd'; args = @('-y', '@modelcontextprotocol/server-github'); env = $githubEnv }
+
+  $config['mcpServers']['firebase'] = [ordered]@{ command = 'firebase'; args = @('mcp') }
+
+  $obsidianKey = [System.Environment]::GetEnvironmentVariable('OBSIDIAN_API_KEY', 'User')
+  if (-not $obsidianKey) { $obsidianKey = $env:OBSIDIAN_API_KEY }
+  $authHeader = if ($obsidianKey) { "Bearer $obsidianKey" } else { Write-Warning "OBSIDIAN_API_KEY not found. Update manually in $configPath"; 'Bearer YOUR_OBSIDIAN_API_KEY' }
+  $config['mcpServers']['obsidian'] = [ordered]@{ type = 'sse'; url = 'http://127.0.0.1:27123/mcp/'; headers = [ordered]@{ Authorization = $authHeader } }
+
+  $config['mcpServers']['notebooklm'] = [ordered]@{ command = 'npx.cmd'; args = @('-y', 'notebooklm-mcp@latest') }
+
+  Write-JsonObject -Object $config -Path $configPath
+  Write-Host "Claude Code: added GitHub, Firebase, Obsidian, NotebookLM MCP to $configPath"
+}
 function Install-ClaudeDesktop {
   if (!$env:APPDATA) {
     Write-Warning "Claude Desktop: APPDATA is not set; skipped."
@@ -204,7 +232,9 @@ Write-Host ""
 foreach ($target in $Targets) {
   switch ($target.ToLowerInvariant()) {
     'codex' { Install-Codex }
-    'opencode' { Install-OpenCode }
+    'opencode'       { Install-OpenCode }
+    'claudecode'     { Install-ClaudeCode }
+    'claude-code'    { Install-ClaudeCode }
     'claudedesktop' { Install-ClaudeDesktop }
     'claude' { Install-ClaudeDesktop }
     'projectmcpjson' { Install-ProjectMcpJson }
@@ -220,5 +250,7 @@ Write-Host "2. For NotebookLM, run the MCP setup_auth tool once and sign in in t
 Write-Host "3. For Firebase MCP, run firebase login once per computer if not already logged in."
 Write-Host "4. For Obsidian MCP, keep Obsidian Local REST/MCP server running and set OBSIDIAN_API_KEY as a local environment variable if your agent requires it."
 Write-Host "5. For GitHub remote MCP, keep GITHUB_PAT_TOKEN only in a local environment variable or credential store; never write the real token into repo files."
+
+
 
 
